@@ -14,9 +14,10 @@ allowed-tools: >
 
 ## Task (follow strictly)
 1) First, detect the latest plan file:
-   - `ls -lt ~/.claude/plans/*.md | head -1` (latest plan file)
-   - Read the plan file content
-2) Run `codex review $ARGUMENTS -c hide_agent_reasoning=true` with the plan file to get review feedback.
+   - Run `ls -t ~/.claude/plans/*.md | head -1` to get the latest plan file path
+   - Store the path (e.g., `PLAN_FILE=~/.claude/plans/example.md`)
+   - Read the plan file content using the Read tool
+2) Run `codex review "$PLAN_FILE" $ARGUMENTS -c hide_agent_reasoning=true` to get review feedback on the plan file.
 3) Read the Codex review output and extract actionable feedback:
    - Missing considerations
    - Potential risks or edge cases
