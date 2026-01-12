@@ -14,6 +14,8 @@ allowed-tools: >
   Bash(git ls-files --others*),
   Bash(git ls-files *),
   Bash(git ls-files),
+  Bash(codex exec *),
+  Bash(codex exec),
   Bash(codex review *),
   Bash(codex review),
   Bash(npm *), Bash(pnpm *), Bash(yarn *), Bash(bun *),
@@ -29,7 +31,10 @@ allowed-tools: >
    - `git status --porcelain=v1` (status)
    - `git diff --name-status` (changed files)
    - `git ls-files --others --exclude-standard` (untracked files)
-2) Run `codex review $ARGUMENTS -c hide_agent_reasoning=true` to get the review output.
+2) Run Codex review in **quiet mode** (avoid tool/command logs in the transcript) and capture only the final review message:
+   - `codex exec -o /tmp/codex-review.last.md review $ARGUMENTS -c hide_agent_reasoning=true >/tmp/codex-review.run.log 2>&1`
+   - Read `/tmp/codex-review.last.md` and use it as the review output.
+   - If `/tmp/codex-review.last.md` is missing/empty, re-run without redirection to see the error output.
 3) Read the Codex review output and extract actionable issues, grouping by severity (P0/P1/P2) and scope.
 4) Apply the minimum code changes needed to address them. Do not do refactors unless required to fix an issue.
 5) Run the project's standard lint/test commands (prefer the lightest "quick" set first). If unsure, infer from package scripts / Makefile / task runner config.

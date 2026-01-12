@@ -60,6 +60,18 @@ allowed-tools: 許可するツール（オプション）
 - Changed files: !`git diff --name-status`
 ```
 
+#### ログを抑える（コンテキスト節約）
+
+出力が長いコマンド（例: `codex review`）は、そのままだと実行ログまで含まれてコンテキストを消費します。  
+以下のように **標準出力/標準エラーをファイルへ退避**し、必要な最終結果だけを `cat` で注入してください。
+
+```markdown
+!`codex exec -o /tmp/codex-review.last.md review $ARGUMENTS -c hide_agent_reasoning=true >/tmp/codex-review.run.log 2>&1`
+!`cat /tmp/codex-review.last.md`
+```
+
+失敗時は `/tmp/codex-review.run.log` を参照します（普段はコンテキストに入れない）。
+
 ### `$ARGUMENTS` 変数
 
 ユーザーが `/command arg1 arg2` と入力した場合、`$ARGUMENTS` には `arg1 arg2` が入ります。

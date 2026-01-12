@@ -17,7 +17,10 @@ allowed-tools: >
    - Run `ls -t ~/.claude/plans/*.md | head -1` to get the latest plan file path
    - Store the path (e.g., `PLAN_FILE=~/.claude/plans/example.md`)
    - Read the plan file content using the Read tool
-2) Run `codex review "$PLAN_FILE" $ARGUMENTS -c hide_agent_reasoning=true` to get review feedback on the plan file.
+2) Run Codex review in **quiet mode** (avoid tool/command logs in the transcript) and capture only the final review message:
+   - `codex exec -o /tmp/plan-review.last.md review "$PLAN_FILE" $ARGUMENTS -c hide_agent_reasoning=true >/tmp/plan-review.run.log 2>&1`
+   - Read `/tmp/plan-review.last.md` and use it as the review output.
+   - If `/tmp/plan-review.last.md` is missing/empty, re-run without redirection to see the error output.
 3) Read the Codex review output and extract actionable feedback:
    - Missing considerations
    - Potential risks or edge cases
