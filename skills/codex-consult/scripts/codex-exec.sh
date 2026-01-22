@@ -15,7 +15,7 @@ set -euo pipefail
 MODEL="${CODEX_MODEL:-gpt-5.2-codex}"
 MODE="plan"
 SCOPE="${PWD}"
-WEB_SEARCH="--search"
+WEB_SEARCH="-c search=true"
 OUTPUT_FILE="/tmp/codex-consult.last.md"
 LOG_FILE="/tmp/codex-consult.run.log"
 TASK=""
@@ -106,7 +106,11 @@ echo "Timestamp: $(date -Iseconds)" >> "$LOG_FILE"
 echo "Model: $MODEL" >> "$LOG_FILE"
 echo "Mode: $MODE" >> "$LOG_FILE"
 echo "Scope: $SCOPE" >> "$LOG_FILE"
-echo "Web Search: ${WEB_SEARCH:-disabled}" >> "$LOG_FILE"
+if [[ -n "$WEB_SEARCH" ]]; then
+    echo "Web Search: enabled" >> "$LOG_FILE"
+else
+    echo "Web Search: disabled" >> "$LOG_FILE"
+fi
 echo "Task: $TASK" >> "$LOG_FILE"
 echo "===" >> "$LOG_FILE"
 
