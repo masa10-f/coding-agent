@@ -1,5 +1,5 @@
 ---
-name: Codex Consult
+name: codex-consult
 description: This skill should be used when the user asks to "consult Codex", "ask Codex for advice", "get implementation suggestions from Codex", "codexに相談", "codexにきいて", "実装方針を相談", "アーキテクチャをcodexに聞く", or needs deeper analysis using OpenAI's Codex model for complex implementation decisions, architecture design, or code review that benefits from extended reasoning.
 version: 1.0.0
 ---
