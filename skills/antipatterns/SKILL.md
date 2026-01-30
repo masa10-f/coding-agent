@@ -35,6 +35,7 @@ The following antipatterns are currently documented:
 | AP-003 | Use collections.abc for generic types | Python/Typing |
 | AP-004 | Reuse existing enums | Code Reuse |
 | AP-005 | Always add unit tests for new features | Testing |
+| AP-006 | Use generic types for input, concrete types for output | Python/Typing |
 
 ## Adding New Antipatterns
 
@@ -77,3 +78,4 @@ All antipattern definitions are stored in:
 - `patterns/AP-003-use-collections-abc.md`
 - `patterns/AP-004-reuse-enums.md`
 - `patterns/AP-005-add-unit-tests.md`
+- `patterns/AP-006-generic-input-concrete-output.md`
