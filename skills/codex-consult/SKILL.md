@@ -150,6 +150,7 @@ Codex CLI may encounter timeout failures (exit code 144) in the following scenar
 3. **Network latency**: Slow connections can cause API timeouts
 
 **Recommendations:**
+- **Set timeout to at least 10 minutes (600 seconds)**: Complex analyses require extended processing time. Shorter timeouts will likely cause failures.
 - Run Codex consultations in the foreground when possible
 - Break down complex queries into smaller, focused questions
 - For large codebases, use `--scope` to limit the analysis scope
