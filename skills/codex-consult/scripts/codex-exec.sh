@@ -3,7 +3,7 @@
 #
 # Usage: codex-exec.sh [OPTIONS] <TASK_DESCRIPTION>
 # Options:
-#   --model=<model>   Model to use (default: gpt-5.2-codex)
+#   --model=<model>   Model to use (default: Codex CLI default)
 #   --mode=plan|patch Execution mode (default: plan)
 #   --scope=<path>    Target directory (default: current)
 #   --no-web          Disable web search (enabled by default)
@@ -12,13 +12,13 @@
 set -euo pipefail
 
 # Default values
-MODEL="${CODEX_MODEL:-gpt-5.2-codex}"
+MODEL="${CODEX_MODEL:-}"
 MODE="plan"
 SCOPE="${PWD}"
-WEB_SEARCH="-c search=true"
+WEB_SEARCH="1"
 OUTPUT_FILE="/tmp/codex-consult.last.md"
 LOG_FILE="/tmp/codex-consult.run.log"
-TASK=""
+TASK_PARTS=()
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --no-web)
-            WEB_SEARCH=""
+            WEB_SEARCH="0"
             shift
             ;;
         --output=*)
@@ -48,11 +48,13 @@ while [[ $# -gt 0 ]]; do
             exit 1
             ;;
         *)
-            TASK="$1"
+            TASK_PARTS+=("$1")
             shift
             ;;
     esac
 done
+
+TASK="${TASK_PARTS[*]}"
 
 # Validate required arguments
 if [[ -z "${TASK}" ]]; then
@@ -103,10 +105,10 @@ fi
 # Log the execution
 echo "=== Codex Consult Execution ===" > "$LOG_FILE"
 echo "Timestamp: $(date -Iseconds)" >> "$LOG_FILE"
-echo "Model: $MODEL" >> "$LOG_FILE"
+echo "Model: ${MODEL:-Codex CLI default}" >> "$LOG_FILE"
 echo "Mode: $MODE" >> "$LOG_FILE"
 echo "Scope: $SCOPE" >> "$LOG_FILE"
-if [[ -n "$WEB_SEARCH" ]]; then
+if [[ "$WEB_SEARCH" == "1" ]]; then
     echo "Web Search: enabled" >> "$LOG_FILE"
 else
     echo "Web Search: disabled" >> "$LOG_FILE"
@@ -114,17 +116,29 @@ fi
 echo "Task: $TASK" >> "$LOG_FILE"
 echo "===" >> "$LOG_FILE"
 
+MODEL_ARGS=()
+if [[ -n "$MODEL" ]]; then
+    MODEL_ARGS=(-m "$MODEL")
+fi
+
+SEARCH_ARGS=()
+if [[ "$WEB_SEARCH" == "1" ]]; then
+    SEARCH_ARGS=(--search)
+fi
+
 # Execute Codex with read-only sandbox
+set +e
 codex exec \
-    -m "$MODEL" \
+    "${MODEL_ARGS[@]}" \
     -s read-only \
     -C "$SCOPE" \
-    $WEB_SEARCH \
+    "${SEARCH_ARGS[@]}" \
     -o "$OUTPUT_FILE" \
     -c hide_agent_reasoning=true \
     "$PROMPT" >> "$LOG_FILE" 2>&1
 
 EXIT_CODE=$?
+set -e
 
 # Check execution result
 if [[ $EXIT_CODE -eq 0 ]] && [[ -s "$OUTPUT_FILE" ]]; then

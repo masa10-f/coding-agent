@@ -33,7 +33,7 @@ codex exec [OPTIONS] [PROMPT]
 **Key Options:**
 | Option | Description |
 |--------|-------------|
-| `-m, --model <MODEL>` | Model to use (e.g., gpt-5.2-codex, o4-mini) |
+| `-m, --model <MODEL>` | Model to use; omit to use the Codex CLI default |
 | `-s, --sandbox <MODE>` | Sandbox mode: read-only, workspace-write, danger-full-access |
 | `-C, --cd <DIR>` | Working directory for the agent |
 | `--search` | Enable web search |
@@ -64,13 +64,9 @@ Resume a previous interactive session.
 codex resume --last
 ```
 
-## Available Models
+## Model Selection
 
-| Model | Description | Use Case |
-|-------|-------------|----------|
-| `gpt-5.2-codex` | Most advanced agentic coding model | Complex architecture, deep analysis |
-| `o4-mini` | Fast and cost-efficient | Quick queries, simple tasks |
-| `o3` | Balanced performance | General purpose |
+Use the Codex CLI default model unless the user explicitly requests a model or the task has a known model requirement. If a model is needed, pass it with `-m` or `--model`.
 
 ## Sandbox Modes
 
@@ -85,8 +81,8 @@ codex resume --last
 Configuration file location: `~/.codex/config.toml`
 
 ```toml
-# Default model
-model = "gpt-5.2-codex"
+# Optional default model
+model = "your-preferred-model"
 
 # Default sandbox mode
 sandbox = "read-only"
@@ -111,7 +107,7 @@ codex exec "Explain the architecture of this project"
 
 ### With specific model and output
 ```bash
-codex exec -m gpt-5.2-codex -o result.md "Design a caching strategy"
+codex exec -m your-preferred-model -o result.md "Design a caching strategy"
 ```
 
 ### Scoped to directory

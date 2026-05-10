@@ -20,9 +20,11 @@ This skill contains a collection of coding antipatterns that agents should avoid
 
 When performing code review or implementation:
 
-1. Review all pattern files in `patterns/` directory
-2. Check if the code being written or reviewed violates any antipattern
-3. If a violation is found, fix it according to the guidance provided
+1. Select the pattern files in `patterns/` that match the language, files, or change being reviewed.
+2. Check whether the code being written or reviewed violates those antipatterns.
+3. If a violation is found, fix it according to the guidance provided.
+
+Do not load every pattern file unless the user asks for a broad review or the change spans multiple unrelated areas.
 
 ## Current Antipatterns
 

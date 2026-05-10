@@ -1,113 +1,57 @@
-# Coding Agent
+# Coding Agent Skills
 
-Claude Code用のスキルとコマンドのコレクション。
+Claude Code と Codex の両方で使うことを想定した agent skill リポジトリです。
 
-## 概要
+## Overview
 
-このリポジトリは、Claude Codeで使用するためのカスタムスキルとスラッシュコマンドを管理しています。ユーザーは必要なものを自分の`.claude`ディレクトリにコピーして使用します。
+このリポジトリでは、複数の coding agent から読める共通 skill 本体を `skills/` に置きます。各 CLI 固有の配置方法や任意機能はドキュメントで分け、skill 本体はできるだけ共通形式に保ちます。
 
-## コンテンツ
+## Contents
 
-### Skills
+### Shared Skills
 
-| スキル | 説明 |
-|--------|------|
-| [codex-consult](./skills/codex-consult/) | OpenAI Codex CLIを使用した実装相談スキル。より深い推論モデルによるアーキテクチャ設計や実装方針の相談が可能 |
+| Skill | Description |
+| --- | --- |
+| [antipatterns](./skills/antipatterns/) | 実装・レビュー時に避けるべきアンチパターン集 |
+| [codex-consult](./skills/codex-consult/) | Codex CLI を別プロセスで実行し、実装方針やレビュー観点を相談する skill |
 
-### Slash Commands
+### Claude Code Slash Commands
 
-| コマンド | 説明 |
-|----------|------|
-| [codex-review](./slash_commands/codex-review.md) | Codex CLIでコードレビューを実行し、修正を適用 |
-| [plan-review](./slash_commands/plan-review.md) | Codex CLIで実装プランをレビューし、フィードバックに基づいて更新 |
+`slash_commands/` は Claude Code 専用です。Codex の skill 管理ディレクトリにはコピーしません。
 
-## インストール方法
+| Command | Description |
+| --- | --- |
+| [codex-review](./slash_commands/codex-review.md) | Claude Code から Codex CLI review を実行し、指摘修正と検証を行う |
+| [plan-review](./slash_commands/plan-review.md) | Claude Code の plan file を Codex CLI でレビューし、フィードバックを反映する |
 
-### Skills のインストール
+## Install
 
-スキルを使用するには、`skills/`ディレクトリの内容を`.claude/skills/`にコピーします：
+このリポジトリは copy 方式でインストールします。symlink 前提にはしません。
 
-```bash
-# 特定のスキルをコピー
-cp -r skills/codex-consult ~/.claude/skills/
+- Claude Code: [docs/install-claude.md](./docs/install-claude.md)
+- Codex: [docs/install-codex.md](./docs/install-codex.md)
 
-# または、プロジェクト固有の.claudeにコピー
-cp -r skills/codex-consult /path/to/your/project/.claude/skills/
-```
+各ドキュメントには、対象 CLI にこのリポジトリを読ませて root skill 管理ディレクトリへコピーさせるためのプロンプトと、手動 copy コマンドの両方を記載しています。
 
-### Slash Commands のインストール
+## Shared Skill Rules
 
-スラッシュコマンドを使用するには、`slash_commands/`ディレクトリの内容を`.claude/commands/`にコピーします：
+共通 skill を追加・更新するときは、以下を守ります。
 
-```bash
-# 特定のコマンドをコピー
-cp slash_commands/codex-review.md ~/.claude/commands/
+- skill は `skills/<skill-name>/SKILL.md` を必須にする。
+- `SKILL.md` の frontmatter は `name` と `description` を必須にし、必要なら `version` だけを追加する。
+- Claude Code 専用の `allowed-tools` や `${CLAUDE_PLUGIN_ROOT}` を `skills/` 配下に入れない。
+- 付属ファイルは `scripts/`, `references/`, `examples/` など、`SKILL.md` からの相対パスで案内する。
+- CLI 固有の install 手順は `docs/` に置く。
 
-# または、プロジェクト固有の.claudeにコピー
-cp slash_commands/codex-review.md /path/to/your/project/.claude/commands/
-```
+## Prerequisites
 
-### 一括インストール
-
-すべてのスキルとコマンドを一括でインストール：
+`codex-consult` と Claude Code 用 slash commands を使う場合は、Codex CLI のインストールと認証が必要です。
 
 ```bash
-# ユーザーレベルにインストール
-mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r skills/* ~/.claude/skills/
-cp slash_commands/*.md ~/.claude/commands/
-
-# プロジェクトレベルにインストール
-PROJECT_DIR=/path/to/your/project
-mkdir -p $PROJECT_DIR/.claude/skills $PROJECT_DIR/.claude/commands
-cp -r skills/* $PROJECT_DIR/.claude/skills/
-cp slash_commands/*.md $PROJECT_DIR/.claude/commands/
-```
-
-## 前提条件
-
-### Codex CLI
-
-codex-consult スキルと codex-review/plan-review コマンドを使用するには、Codex CLIのインストールと認証が必要です：
-
-```bash
-# インストール
 npm install -g @openai/codex
-
-# 認証
 codex login
 ```
 
-## スキル詳細
-
-### codex-consult
-
-OpenAI Codex CLIを使用して、より深い推論モデル（gpt-5.2-codex）に実装の相談ができるスキルです。
-
-**特徴:**
-- **Plan Mode**: 実装方針と戦略を提案（デフォルト）
-- **Patch Mode**: unified diff形式の具体的なコード変更を提案
-- **Web Search**: デフォルトで有効、最新情報を参照可能
-- **Read-only**: 安全なサンドボックスで実行
-
-**使用例:**
-- 「Codexに相談して」
-- 「実装方針をcodexに聞きたい」
-- 「アーキテクチャの設計をcodexにレビューしてもらって」
-
-**ディレクトリ構成:**
-```
-skills/codex-consult/
-├── SKILL.md           # スキル定義
-├── scripts/
-│   └── codex-exec.sh  # Codex CLI実行ラッパー
-├── references/
-│   ├── codex-cli-reference.md  # CLI リファレンス
-│   └── output-format.md        # 出力フォーマット仕様
-└── examples/
-    └── sample-consultation.md  # サンプル出力
-```
-
-## ライセンス
+## License
 
 MIT

@@ -8,7 +8,9 @@ version: 1.0.0
 
 ## Overview
 
-This skill enables consultation with OpenAI's Codex CLI for deeper implementation analysis. Codex uses more powerful reasoning models (gpt-5.2-codex) that can provide thorough architectural guidance and implementation plans.
+This skill runs OpenAI's Codex CLI as a separate process for deeper implementation analysis, planning, or review.
+
+When this skill is used from Claude Code, it is a way to consult Codex from the current project context. When this skill is used from Codex itself, use it only when the user explicitly wants an independent Codex CLI run; otherwise, answer directly instead of recursively consulting Codex.
 
 **When to use:**
 - Complex architectural decisions requiring deep analysis
@@ -40,7 +42,7 @@ Output includes:
 | Argument | Description | Default |
 |----------|-------------|---------|
 | Task description | Required. What to analyze or plan | - |
-| `--model=<model>` | Model to use | gpt-5.2-codex |
+| `--model=<model>` | Model to use | Codex CLI default |
 | `--mode=plan\|patch` | Execution mode | plan |
 | `--scope=<path>` | Target directory | current repo root |
 | `--no-web` | Disable web search | web enabled by default |
@@ -53,7 +55,7 @@ To consult Codex for implementation planning:
 
 1. Execute the wrapper script with task description:
    ```bash
-   bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh "Implement user authentication with JWT"
+   bash scripts/codex-exec.sh "Implement user authentication with JWT"
    ```
 
 2. Read the output from `/tmp/codex-consult.last.md`
@@ -65,7 +67,7 @@ To consult Codex for implementation planning:
 To get concrete code change suggestions:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --mode=patch "Refactor the database connection to use connection pooling"
+bash scripts/codex-exec.sh --mode=patch "Refactor the database connection to use connection pooling"
 ```
 
 ### Custom Model
@@ -73,7 +75,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --mode=patch "Refactor the data
 To use a different model:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --model=o4-mini "Design the caching layer"
+bash scripts/codex-exec.sh --model=o4-mini "Design the caching layer"
 ```
 
 ### Scoped Analysis
@@ -81,7 +83,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --model=o4-mini "Design the cac
 To analyze a specific directory:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --scope=/path/to/src "Review error handling patterns"
+bash scripts/codex-exec.sh --scope=/path/to/src "Review error handling patterns"
 ```
 
 ### Disable Web Search
@@ -89,7 +91,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --scope=/path/to/src "Review er
 To run without web search:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --no-web "Analyze this legacy code"
+bash scripts/codex-exec.sh --no-web "Analyze this legacy code"
 ```
 
 ## Output Interpretation
@@ -135,10 +137,10 @@ When working in directories that contain multiple git repositories (e.g., nested
 **Solution:** Always use explicit `--scope` parameter:
 ```bash
 # From any directory, specify the target project explicitly
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --scope=/home/user/projects/main-project "Analyze the codebase"
+bash scripts/codex-exec.sh --scope=/home/user/projects/main-project "Analyze the codebase"
 
 # Or use $(pwd) to ensure current directory is used
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/codex-exec.sh --scope=$(pwd) "Analyze the codebase"
+bash scripts/codex-exec.sh --scope=$(pwd) "Analyze the codebase"
 ```
 
 ### Timeout Considerations
