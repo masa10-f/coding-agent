@@ -43,6 +43,8 @@ Claude Code と Codex の両方で使うことを想定した agent skill リポ
 - 付属ファイルは `scripts/`, `references/`, `examples/` など、`SKILL.md` からの相対パスで案内する。
 - CLI 固有の install 手順は `docs/` に置く。
 
+詳細な追加手順とレビュー観点は [docs/adding-skills.md](./docs/adding-skills.md) を参照してください。
+
 ## Prerequisites
 
 `codex-consult` と Claude Code 用 slash commands を使う場合は、Codex CLI のインストールと認証が必要です。
