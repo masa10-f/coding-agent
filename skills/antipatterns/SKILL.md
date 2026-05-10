@@ -38,6 +38,8 @@ The following antipatterns are currently documented:
 | AP-004 | Reuse existing enums | Code Reuse |
 | AP-005 | Always add unit tests for new features | Testing |
 | AP-006 | Use generic types for input, concrete types for output | Python/Typing |
+| AP-007 | Avoid unnecessary try-except blocks | Python/Error Handling |
+| AP-008 | Avoid suppressive attribute checks | Python/API Usage |
 
 ## Adding New Antipatterns
 
@@ -81,3 +83,5 @@ All antipattern definitions are stored in:
 - `patterns/AP-004-reuse-enums.md`
 - `patterns/AP-005-add-unit-tests.md`
 - `patterns/AP-006-generic-input-concrete-output.md`
+- `patterns/AP-007-avoid-unnecessary-try-except.md`
+- `patterns/AP-008-avoid-suppressive-attribute-checks.md`
