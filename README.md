@@ -14,6 +14,7 @@ Claude Code と Codex の両方で使うことを想定した agent skill リポ
 | --- | --- |
 | [antipatterns](./skills/antipatterns/) | 実装・レビュー時に避けるべきアンチパターン集 |
 | [codex-consult](./skills/codex-consult/) | Codex CLI を別プロセスで実行し、実装方針やレビュー観点を相談する skill |
+| [unit-test-review](./skills/unit-test-review/) | unit test の品質レビューで壊れやすい・価値の低いテストを検出する skill |
 
 ### Claude Code Slash Commands
 
