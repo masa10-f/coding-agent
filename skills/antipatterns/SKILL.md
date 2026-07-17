@@ -1,7 +1,6 @@
 ---
 name: antipatterns
 description: This skill should be used automatically during code review and implementation to prevent common coding mistakes and antipatterns. It helps agents avoid known bad practices that have been identified through past experiences.
-version: 1.0.0
 ---
 
 # Antipatterns Skill
@@ -26,6 +25,8 @@ When performing code review or implementation:
 
 Do not load every pattern file unless the user asks for a broad review or the change spans multiple unrelated areas.
 
+For reviews focused on readability, unnecessary code, type aliases, private helpers, or public API size, always load AP-010.
+
 ## Current Antipatterns
 
 The following antipatterns are currently documented:
@@ -41,6 +42,7 @@ The following antipatterns are currently documented:
 | AP-007 | Avoid unnecessary try-except blocks | Python/Error Handling |
 | AP-008 | Avoid suppressive attribute checks | Python/API Usage |
 | AP-009 | Avoid careless use of `cast` | Python/Typing |
+| AP-010 | Avoid low-value indirection | Readability/API Design |
 
 ## Adding New Antipatterns
 
@@ -87,3 +89,4 @@ All antipattern definitions are stored in:
 - `patterns/AP-007-avoid-unnecessary-try-except.md`
 - `patterns/AP-008-avoid-suppressive-attribute-checks.md`
 - `patterns/AP-009-avoid-careless-cast.md`
+- `patterns/AP-010-avoid-low-value-indirection.md`
