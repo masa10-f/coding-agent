@@ -23,16 +23,25 @@ skills/<skill-name>/
 ```text
 skills/<skill-name>/
 ├── SKILL.md
+├── checks/
 ├── scripts/
 ├── references/
 ├── examples/
 └── assets/
 ```
 
+- `checks/`: review 系 skill の個別チェック項目を 1 ファイル 1 項目で入れる。
 - `scripts/`: 繰り返し実行する処理、壊れやすい手順、長いコードを入れる。
 - `references/`: 詳細仕様、API メモ、長い例、ドメイン知識を入れる。
 - `examples/`: 入出力例や sample artifact を入れる。
 - `assets/`: 出力に使うテンプレートや画像など、agent が読むより利用するファイルを入れる。
+
+`checks/` を使う場合は以下に従う。
+
+- ファイル名は `<PREFIX>-<連番>-<kebab-case-name>.md` にする (例: `UT-001-specific-test-names.md`)。
+- 各ファイルの見出しは `## Category`, `## Description`, `## Why It Matters`, `## Correct Approach`, `## Examples`, `## Review Guidance` に揃える。
+- `SKILL.md` に ID・名称・カテゴリの一覧表と、check ファイルパスの一覧を書く。
+- `SKILL.md` の本文で「全部読ませず、関連する check だけ選ばせる」ことを明示する。必ず適用させたい check がある場合はそれを名指しする。
 
 skill ディレクトリ直下に `README.md`, `INSTALL.md`, `CHANGELOG.md` などの補助文書は作らない。必要な説明は `SKILL.md` か `references/` に入れる。
 
